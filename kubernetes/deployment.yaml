@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp-website
+spec:
+  selector:
+    matchLabels:
+      app: testapp-website
+  template:
+    metadata:
+      labels:
+        app: testapp-website
+    spec:
+      containers:
+        - image: rstestappregistry/testapp-website
+          name: testapp-website
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 80
+              name: http

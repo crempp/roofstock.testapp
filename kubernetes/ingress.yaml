@@ -1,0 +1,19 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: testapp-website
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+    - host: contoso.
+      http:
+        paths:
+          - backend:
+              service:
+                name: testapp-website
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
