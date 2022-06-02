@@ -1,0 +1,6 @@
+image:
+  registry: stestappregistry
+  name: testapp-website
+  tag: latest
+dns:
+  name: 34575abbbc5c4af9ae77.australiacentral.aksapp.io
