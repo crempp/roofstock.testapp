@@ -6,6 +6,11 @@ on:
 
 jobs:
   call-deploy:
-      uses: ./.github/workflows/deploy.yml
-      with:
-        environment: production
+    uses: ./.github/workflows/deploy.yml
+    # Link this workflow with the GH environment
+    # See: https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#using-an-environment
+    # environment: 
+    #   name: production
+    #   url: https://roofstock.com
+    with:
+      environment: production
