@@ -1,0 +1,13 @@
+name: Build and Deploy to Production
+
+workflow_call:
+
+jobs:
+  call-deploy:
+      name: Call Shared Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - call-workflow-deploy:
+          uses: ./.github/workflows/deploy.yml
+          with:
+            environment: production

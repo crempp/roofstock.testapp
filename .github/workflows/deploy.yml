@@ -1,0 +1,51 @@
+name: Build and Deploy (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        default: 'dev'
+        required: true
+        type: string
+
+
+jobs:
+  build_push_image:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Docker Repository Login
+        run: |
+          echo "Logging into Docker repository for ${{ inputs.environment }"
+          
+      - name: Build and Push Image
+        run: |
+          echo "Building and pushing to ${{ inputs.environment }"
+
+  deploy:
+    runs-on: ubuntu-20.04
+    needs: build_push_image
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Helm
+        uses: Azure/setup-helm@v1
+        with:
+          version: v3.3.1
+
+      - name: Get AKS Credentials
+        run: |
+          echo "Getting AKS creds for ${{ inputs.environment }"
+
+      - name: Run Helm Deploy
+        run: |
+          echo "Running Helm upgrade for ${{ inputs.environment }"

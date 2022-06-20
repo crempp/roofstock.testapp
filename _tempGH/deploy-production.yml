@@ -1,4 +1,4 @@
-name: Build and push the latest build to production
+name: Build and Deploy to Production
 
 on:
   push:
