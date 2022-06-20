@@ -6,10 +6,6 @@ on:
 
 jobs:
   call-deploy:
-      name: Call Shared Deploy
-      runs-on: ubuntu-latest
-      steps:
-        - call-workflow-deploy:
-          uses: ./.github/workflows/deploy.yml
-          with:
-            environment: staging
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: staging

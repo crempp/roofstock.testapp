@@ -40,6 +40,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     if: github.ref == 'refs/heads/main'
-    steps:
-      - call-workflow-deploy-production:
-        uses: ./.github/workflows/deploy-production.yml
+    uses: ./.github/workflows/deploy-production.yml
