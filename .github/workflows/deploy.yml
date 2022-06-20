@@ -24,11 +24,11 @@ jobs:
       
       - name: Docker Repository Login
         run: |
-          echo "Logging into Docker repository for ${{ inputs.environment }}/$GITHUB_REF"
+          echo "Logging into Docker repository for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
           
       - name: Build and Push Image
         run: |
-          echo "Building and pushing to ${{ inputs.environment }}/$GITHUB_REF"
+          echo "Building and pushing to ${{ inputs.environment }}/${GITHUB_REF_NAME}"
 
   deploy:
     runs-on: ubuntu-20.04
@@ -44,8 +44,8 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          echo "Getting AKS creds for ${{ inputs.environment }}/$GITHUB_REF"
+          echo "Getting AKS creds for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
 
       - name: Run Helm Deploy
         run: |
-          echo "Running Helm upgrade for ${{ inputs.environment }}/$GITHUB_REF"
+          echo "Running Helm upgrade for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
