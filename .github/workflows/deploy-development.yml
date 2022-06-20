@@ -1,4 +1,4 @@
-name: Build Development
+name: Deploy Development
 
 on:
   workflow_call:
