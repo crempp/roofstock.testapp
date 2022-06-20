@@ -3,10 +3,6 @@ name: Continuous Integration
 on:
   pull_request:
     branches: [master, main]
-  push:
-    branches:    
-      - 'main'
-  workflow_dispatch:
 
 jobs:
   lint:
@@ -50,4 +46,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: development
+      environment: production
+    # When moved to Roofstock org try this. It didn't work on my personal
+    # account becuase I'm limited to a call depth of 1. I think in enterprise
+    # there's a call depth of 2
+    # uses: ./.github/workflows/deploy-production.yml
+    #   no need for then environment to be set

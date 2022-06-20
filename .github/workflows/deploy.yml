@@ -1,4 +1,4 @@
-name: Build and Deploy (reusable)
+name: Deploy [Base]
 
 on:
   workflow_call:
