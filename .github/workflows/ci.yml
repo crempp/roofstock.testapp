@@ -18,6 +18,7 @@ jobs:
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
+      
       - name: Lint Code Base
         uses: github/super-linter/slim@v4
         env:
@@ -30,14 +31,19 @@ jobs:
           IGNORE_GITIGNORED_FILES: true
           IGNORE_GENERATED_FILES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
   test:
     name: Test Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.0
-      
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: yarn install
+
       - name: Run Tests
         run: yarn test
+  
   call-deploy:
     name: Call Deploy to Prod
     needs: [lint, test]
