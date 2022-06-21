@@ -1,6 +1,11 @@
-name: Deploy [Base]
+name: Deploy
 
 on:
+  environment:
+      description: 'Environment to deploy to'
+      type: environment
+      default: 'development'
+      required: true
   workflow_call:
     inputs:
       environment:
@@ -8,7 +13,6 @@ on:
         default: 'dev'
         required: true
         type: string
-
 
 jobs:
   build_push_image:
@@ -24,11 +28,11 @@ jobs:
       
       - name: Docker Repository Login
         run: |
-          echo "Logging into Docker repository for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
+          echo "Logging into Docker repository for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
           
       - name: Build and Push Image
         run: |
-          echo "Building and pushing to ${{ inputs.environment }}/${GITHUB_REF_NAME}"
+          echo "Building and pushing to ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
 
   deploy:
     runs-on: ubuntu-20.04
@@ -44,8 +48,8 @@ jobs:
 
       - name: Get AKS Credentials
         run: |
-          echo "Getting AKS creds for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
+          echo "Getting AKS creds for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
 
       - name: Run Helm Deploy
         run: |
-          echo "Running Helm upgrade for ${{ inputs.environment }}/${GITHUB_REF_NAME}"
+          echo "Running Helm upgrade for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
