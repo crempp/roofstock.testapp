@@ -1,9 +1,12 @@
 name: Continuous Integration
 
 on:
-  pull_request:
-    branches: [master, main]
-    types: [opened, reopened, edited]
+  # pull_request:
+  #   branches: [master, main]
+  #   types: [opened, reopened, edited]
+  push:
+    branches:
+      - "*"
 
 jobs:
   lint:
