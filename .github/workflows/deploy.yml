@@ -1,6 +1,9 @@
-name: Deploy
+name: Release
 
 on:
+  pull_request:
+    branches: [main]
+    type: 
   workflow_dispatch:
     inputs:
       environment:
@@ -8,50 +11,76 @@ on:
           type: environment
           default: 'dev'
           required: true
-  workflow_call:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        default: 'dev'
-        required: true
-        type: string
 
 jobs:
+  ci:
+    name: Run CI
+    uses: ./.github/workflows/ci.yml
+
   build_push_image:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    needs: [ci]
 
     steps:
-      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "🔧 setup buildx"
+        uses: docker/setup-buildx-action@v2
       
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@v1
-      
-      - name: Docker Repository Login
+      - name: "🔒 docker repository login"
         run: |
           echo "Logging into Docker repository for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
-          
+        # uses: docker/login-action@v2
+        # with:
+        #   registry: ${{ secrets.ACR_NAME }}
+        #   username: ${{ secrets.ACR_LOGIN }}
+        #   password: ${{ secrets.ACR_PASSWORD }}
+        #   ecr: auto
+        #   logout: true
+
       - name: Build and Push Image
         run: |
           echo "Building and pushing to ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
+        # uses: docker/build-push-action@v3
+        # with:
+        #   context: .
+        #   push: true
+        #   tags: ${{secrets.ACR_NAME}}/testapp-website:latest
 
-  deploy:
+  release:
     runs-on: ubuntu-20.04
     needs: build_push_image
 
     steps:
-      - uses: actions/checkout@v2
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
 
-      - name: Install Helm
+      - name: "☸️ install helm"
         uses: Azure/setup-helm@v1
         with:
           version: v3.3.1
 
-      - name: Get AKS Credentials
+      - name: "🔒 get aks credentials"
         run: |
           echo "Getting AKS creds for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
+        # uses: Azure/aks-set-context@v2
+        # with:
+        #   creds: ${{ secrets.AZURE_CREDENTIALS }}
+        #   resource-group: production-resourceGroup
+        #   cluster-name: test-app
 
-      - name: Run Helm Deploy
+      - name: "🚀 run helm deploy"
         run: |
           echo "Running Helm upgrade for ${{ inputs.environment }}/${{ github.event.inputs.environment }}/${GITHUB_REF_NAME}"
+        # run: |
+        #   helm upgrade \
+        #     --install \
+        #     --create-namespace \
+        #     --atomic \
+        #     --wait \
+        #     --namespace production \
+        #     test-app \
+        #     ./testapp-website \
+        #     --set image.repository=${{ secrets.ACR_NAME }} \
+        #     --set dns.name=${{ secrets.DNS_NAME }}

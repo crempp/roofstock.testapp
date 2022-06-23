@@ -7,47 +7,94 @@ on:
   push:
     branches:
       - "*"
+  workflow_call:
 
 jobs:
   lint:
-    name: Lint Code
+    name: Code standards
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: "☁️ checkout repository"
         uses: actions/checkout@v3
+
+      - name: "🔧 setup node"
+        uses: actions/setup-node@v3
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
+          node-version: 16
+
+      - name: "🔧 install npm@latest"
+        run: npm i -g npm@latest
+
+      - name: "📦 install dependencies"
+        uses: bahmutov/npm-install@v1
+
+      - name: "🔍 lint code"
+        run: npm run lint --if-present
       
-      - name: Lint Code Base
-        uses: github/super-linter/slim@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: main
-          FILTER_REGEX_INCLUDE: .*src/.*
-          MULTI_STATUS: false
-          LINTER_RULES_PATH: /
-          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.json
-          IGNORE_GITIGNORED_FILES: true
-          IGNORE_GENERATED_FILES: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
   test:
-    name: Test Code
+    name: Test Application
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: yarn install
+      - name: "🔧 setup node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-      - name: Run Tests
+      - name: "📦 install dependencies"
+        uses: bahmutov/npm-install@v1
+
+      - name: "🔍 run tests"
         run: yarn test
-  
-  call-deploy:
-    name: Call Deploy to Prod
-    needs: [lint, test]
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment: production
+
+  analyze:
+    name: Run Code Analysis
+    uses: ./.github/workflows/codeql-analysis.yml
+
+  semantics:
+    name: Semantics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          requireScope: false
+          subjectPattern: ^([A-Z]+-\d+).*$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            contains a Jira issue ID.
+
+  pr-compliance-checks:
+    name: PR Compliance Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mtfoley/pr-compliance-action@main
+        with:
+          title-check-enable: false # Title is checked by Semantics
+          body-auto-close: false
+          protected-branch-auto-close: false
+          watch-files: |
+            package.json
+            package-lock.json
+            yarn.lock
+            npm-shrinkwrap.json
+          body-comment: >
+            ## Issue Reference
+            In order to be considered for merging, the pull request description must refer to a
+            specific issue number. This is described in our
+            [Contributing Guide](https://docs.opensauced.pizza/contributing/getting-started/).
+            This check is looking for a phrase similar to: "Fixes #XYZ" or "Resolves #XYZ" where XYZ is the issue
+            number that this PR is meant to address.
+          protected-branch-comment: >
+            ## Protected Branch
+            In order to be considered for merging, the pull request changes must
+            not be implemented on the "%branch%" branch. This is described in our
+            [Contributing Guide](https://docs.opensauced.pizza/contributing/getting-started/).
+            We would suggest that you close this PR and implement your changes as
+            described in our Contributing Guide and open a new pull request.
+
+
