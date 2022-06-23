@@ -1,12 +1,12 @@
 name: Continuous Integration
 
 on:
-  # pull_request:
-  #   branches: [master, main]
-  #   types: [opened, reopened, edited]
-  push:
-    branches:
-      - "*"
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, edited]
+  # push:
+  #   branches:
+  #     - "*"
   workflow_call:
 
 jobs:
@@ -49,10 +49,6 @@ jobs:
       - name: "🔍 run tests"
         run: yarn test
 
-  analyze:
-    name: Run Code Analysis
-    uses: ./.github/workflows/codeql-analysis.yml
-
   semantics:
     name: Semantics
     runs-on: ubuntu-latest
@@ -72,7 +68,7 @@ jobs:
     name: PR Compliance Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: mtfoley/pr-compliance-action@main
+      - uses: mtfoley/pr-compliance-action@v1.0.1
         with:
           title-check-enable: false # Title is checked by Semantics
           body-auto-close: false
