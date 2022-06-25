@@ -20,5 +20,6 @@ jobs:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         name: pr-${{ github.event.number }}-${{ github.event.pull_request.user.login }}
-        scope: global
+        # scope: global
+        scope: personal
         timeout: 15m
