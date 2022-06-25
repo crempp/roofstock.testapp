@@ -29,6 +29,6 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.next ./.next
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD [ "yarn", "start" ]
