@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: testapp
+  labels:
+    app.kubernetes.io/instance: testapp
+    app.kubernetes.io/version: "1.0.0"
+  annotations:
+    dev.okteto.com/generate-host: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: testapp-frontend
+              servicePort: 80
