@@ -1,0 +1,6 @@
+icon: https://avatars.githubusercontent.com/u/524559?v=4
+deploy:
+  - okteto build -t okteto.dev/frontend:${OKTETO_GIT_COMMIT} frontend
+  - helm upgrade --install testapp chart --set tag=${OKTETO_GIT_COMMIT}
+devs:
+  - okteto.yml
