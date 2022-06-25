@@ -11,9 +11,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
-            backend:
+          - backend:
               service:
-                name: testapp-frontend
+                name: frontend
                 port:
                   number: 80
+            path: /
+            pathType: ImplementationSpecific
