@@ -3,6 +3,6 @@ command: yarn start
 sync:
   - .:/src
 forward:
-  - 3000:80
+  - 80:3000
 persistentVolume:
   enabled: false
