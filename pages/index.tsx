@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Deploy fast, deploy often.
         </p>
 
         <div className={styles.grid}>

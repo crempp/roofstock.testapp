@@ -1,0 +1,6 @@
+services:
+  testapp:
+    build: .
+    scale: 1
+    ports:
+      - 80:3000
