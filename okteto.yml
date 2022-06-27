@@ -1,7 +1,7 @@
 name: testapp
 command: yarn start
 sync:
-  - .:/src
+  - .:/app
 forward:
   - 80:3000
 persistentVolume:
