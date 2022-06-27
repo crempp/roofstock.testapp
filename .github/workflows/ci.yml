@@ -65,6 +65,11 @@ jobs:
           start: yarn start
           # quote the url to be safe against YML parsing surprises
           wait-on: 'http://localhost:3000'
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # semantics:
   #   name: Semantics
