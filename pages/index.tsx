@@ -58,9 +58,9 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by Chad
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <Image src="https://avatars.githubusercontent.com/u/524559?v=4" alt="Chad" width={72} height={16} />
           </span>
         </a>
       </footer>
