@@ -1,0 +1,6 @@
+services:
+  vote:
+    build: .
+    scale: 1
+    ports:
+      - 80:3080
