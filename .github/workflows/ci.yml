@@ -60,16 +60,11 @@ jobs:
         uses: cypress-io/github-action@v4.1.0
         with:
           browser: chrome
-          headless: true
-          build: yarn build
-          start: yarn start
-          # quote the url to be safe against YML parsing surprises
-          wait-on: 'http://localhost:3000'
+          record: true
         env:
-          # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
 
   # semantics:
   #   name: Semantics
