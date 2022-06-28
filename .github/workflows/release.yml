@@ -16,6 +16,8 @@ jobs:
   ci:
     name: Run CI
     uses: ./.github/workflows/ci.yml
+    secrets:
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
   build_push_image:
     runs-on: ubuntu-latest
