@@ -60,7 +60,7 @@ const Home: NextPage = () => {
         >
           Powered by Chad
           <span className={styles.logo}>
-            <img src="https://avatars.githubusercontent.com/u/524559?v=4" alt="Chad" width={72} height={16} />
+            <img src="https://avatars.githubusercontent.com/u/524559?v=4" alt="Chad" width={120} height={120} />
           </span>
         </a>
       </footer>
