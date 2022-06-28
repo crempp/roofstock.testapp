@@ -8,6 +8,10 @@ on:
   #   branches:
   #     - "*"
   workflow_call:
+    secrets:
+      CYPRESS_RECORD_KEY:
+        description: 'Cypress record key'
+        required: true
 
 jobs:
   lint:
